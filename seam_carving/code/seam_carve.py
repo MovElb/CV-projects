@@ -129,6 +129,39 @@ def add_carve(img, coord):
 
 
 def seam_carve(img, mode, mask=None):
+    """Resizes the image on 1 pixel using seam carving technique.
+       Works in 4 modes: vertical(horizontal) shrink(expand). 
+       Mask allows to avoid deleting some fragments of picture or
+       conversely or force delete them.
+       
+       Parameters:
+       ----------
+       img : NumPy 3d-array
+           Image for resizing.
+       
+       mode : string
+           String in the following style:
+               vertical shrink
+               vertical expand
+               horizontal shrink
+               horizontal shrink
+       
+       mask : NumPy 2d-array
+           Specifies mask for deleting(preserving) fragments of picture.
+       
+       Returns:
+       ----------
+       resized_img : NumPy 3d-array
+           Resized image
+       
+       resized_mask : NumPy 2d-array
+           Resized mask
+       
+       carve_mask : NumPy 2d-array
+           Binary array where if in x, y is 1 then that pixel should be deleted, 
+           if in x, y is 0 then that pixel should be preserved.
+    """
+    
     if mode[: 4] == 'vert':
         img = np.swapaxes(img, 0, 1)
         if mask is not None:
