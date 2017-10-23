@@ -4,7 +4,7 @@ from sys import argv, exit
 from numpy import zeros
 from os.path import join
 from fit_and_classify import fit_and_classify
-from hog.py import extract_hog
+from hog import extract_hog
 from skimage.io import imread
 
 from time import time
