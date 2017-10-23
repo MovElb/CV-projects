@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+#GUI was provided by Vlad Shakhuro https://github.com/shahurik
+
 import sys
 import os.path
 from scipy.misc import imread
