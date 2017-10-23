@@ -58,6 +58,11 @@ def extract_hog(img, orientations=9, pixels_per_cell=(8, 8), cells_per_block=(2,
        
        apply_sqrt : bool
            Apply a square root on image.
+       
+       Returns:
+       ----------
+       hog_vec : NumPy 1-d array
+           HOG vector.
     """
     
     img = preprocess_img(img)
