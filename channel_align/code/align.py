@@ -62,7 +62,30 @@ def pyramid(im1, im2, level):
     return offset
 
 
-def align(bgr_image, g_coord):
+def align(bgr_image, g_coord=None):
+    """Aligns an image from BGR channels given as one image
+       
+       Parameters 
+       ----------
+       bgr_image : NumPy 3d-array
+           An image containing BGR channels placed in a column.
+
+       g_coord : list
+           x,y coordinates of a pooint in green channel for giving an offset
+           relatively to it.
+      
+       Returns
+       ----------
+       al_im : NumPy 3d-array
+           Aligned image
+       
+       b_coord : list
+           x, y offset of blue channel  relativly to g_coord
+       
+       g_coord : list
+           x, y offset of red channel relativly to g_coord
+    """
+
     b_row = b_col = r_row = r_col = 0
 
     h_div3 = bgr_image.shape[0] // 3
@@ -83,16 +106,23 @@ def align(bgr_image, g_coord):
         offset_bg = pyramid(channels[1], channels[0], 5)
         offset_rg = pyramid(channels[1], channels[2], 5)
 
-    b_row = g_coord[0] - offset_bg[0] - h_div3
-    b_col = g_coord[1] - offset_bg[1]
     channels[0] = np.roll(channels[0], offset_bg[0], axis=0)
     channels[0] = np.roll(channels[0], offset_bg[1], axis=1)
 
-    r_row = g_coord[0] - offset_rg[0] + h_div3
-    r_col = g_coord[1] - offset_rg[1]
     channels[2] = np.roll(channels[2], offset_rg[0], axis=0)
     channels[2] = np.roll(channels[2], offset_rg[1], axis=1)
 
     channels[0], channels[2] = channels[2], channels[0]
-    return misc.toimage(channels), (b_row, b_col), (r_row, r_col)
+    al_im = misc.toimage(channels)
+   
+    if g_coord != None:
+        b_row = g_coord[0] - offset_bg[0] - h_div3
+        b_col = g_coord[1] - offset_bg[1]
+        r_row = g_coord[0] - offset_rg[0] + h_div3
+        r_col = g_coord[1] - offset_rg[1]
+
+        b_coord = (b_row, b_col)
+        r_coord = (r_row, r_col)
+        return al_im, b_coord, r_coord
+    return al_im
 
